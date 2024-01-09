@@ -1,0 +1,53 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 19
+        uses: actions/setup-java@v2
+        with:
+          java-version: '19'
+          distribution: 'temurin' # Adding the correct distribution here
+
+
+      #  steps to build project and run tests here
+      - name: Build and Test
+        run: |
+          mvn clean package
+          mvn test
+
+      #step to debug and make sure that the .target is created with the jar file
+      - name: List contents of the target directory
+        run: ls -l ./target
+
+
+      # This step will only execute if the build and test steps are successful
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: release-${{ github.run_id }}
+          release_name: Release-${{ github.run_id }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./target/spring-boot-jpa-h2-0.0.1-SNAPSHOT.jar
+          asset_name: spring-boot-jpa-h2-0.0.1-SNAPSHOT.jar
+          asset_content_type: application/java-archive
