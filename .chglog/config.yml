@@ -1,0 +1,17 @@
+style: "angular" # Changelog style (preset)
+template: "CHANGELOG.tpl.md" # Path to the changelog template
+info:
+  title: "Changelog"
+  repository_url: "https://github.com/hben-emse/spring-boot-h2-database-crud"
+
+options:
+  commit_groups:
+    title_maps:
+      feat: "Features"
+      fix: "Bug Fixes"
+      perf: "Performance Improvements"
+
+  commit_filters:
+    feat: "^feat"
+    fix: "^fix"
+    perf: "^perf"

@@ -10,6 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install git-chglog
+        run: |
+          wget https://github.com/git-chglog/git-chglog/releases/download/v0.15.4/git-chglog_0.15.4_linux_amd64.tar.gz
+          tar -xzf git-chglog_0.15.4_linux_amd64.tar.gz
+          chmod +x git-chglog
+          sudo mv git-chglog /usr/local/bin/
+
       - uses: actions/checkout@v2
 
       - name: Set up JDK 19
@@ -17,6 +29,8 @@ jobs:
         with:
           java-version: '19'
           distribution: 'temurin' # Adding the correct distribution here
+
+
 
 
       #  steps to build project and run tests here
@@ -51,3 +65,6 @@ jobs:
           asset_path: ./target/spring-boot-jpa-h2-0.0.1-SNAPSHOT.jar
           asset_name: spring-boot-jpa-h2-0.0.1-SNAPSHOT.jar
           asset_content_type: application/java-archive
+
+
+
